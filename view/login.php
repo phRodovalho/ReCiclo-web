@@ -18,32 +18,31 @@
 
                             <div class="d-flex justify-content-center py-4 ">
                                 <h1 class="logo"><a href="index.php">ReCiclo</a></h1>
-                            </div><!-- End Logo -->
+                            </div>
 
                             <div class="card mb-3">
-
                                 <div class="card-body">
 
                                     <div class="pt-4 pb-2">
                                         <h5 class="card-title text-center pb-0 fs-4">Fazer Login</h5>
-                                        <p class="text-center small">Entre com e-mail e senha</p>
+                                        <p class="text-center small">na sua conta ReCiclo</p>
                                     </div>
 
-                                    <form class="row g-3 needs-validation" novalidate>
+                                    <form class="row g-3 needs-validation" novalidate method="post" action="../controller/ControllerUser.php">
 
                                         <div class="col-12">
-                                            <label for="yourUsername" class="form-label">E-mail</label>
+
                                             <div class="input-group has-validation">
-                                                <span class="input-group-text" id="inputGroupPrepend">@</span>
-                                                <input type="text" name="username" class="form-control" id="yourUsername" required>
-                                                <div class="invalid-feedback">Digite seu e-mail.</div>
+                                                <input type="text" name="username" class="form-control" id="yourUsername" placeholder="E-mail" required autofocus>
+                                                <div class="invalid-feedback">Digite seu e-mail!</div>
                                             </div>
                                         </div>
 
                                         <div class="col-12">
-                                            <label for="yourPassword" class="form-label">Senha</label>
-                                            <input type="password" name="password" class="form-control" id="yourPassword" required>
-                                            <div class="invalid-feedback">Digite sua senha!</div>
+                                            <div class="input-group has-validation">
+                                                <input type="password" name="password" class="form-control" id="yourPassword" placeholder="Senha" required autofocus>
+                                                <div class="invalid-feedback">Digite sua senha!</div>
+                                            </div>
                                         </div>
 
                                         <div class="col-12">
@@ -55,14 +54,25 @@
                                         <div class="col-12">
                                             <button class="btn btn-primary w-100" type="submit">Login</button>
                                         </div>
-                                        <div class="col-12">
-                                            <p class="small mb-0">Novo por aqui? <a href="pages-register.html">Criar sua conta ReCiclo</a></p>
-                                        </div>
+
                                     </form>
 
                                 </div>
+                                <div class="card-footer">
+                                    <div class="col-12">
+                                        <label class="form-check-label">Novo por aqui? Crie sua conta <b>ReCiclo</b></label>
+                                        <div class="btn-group justify-content-center d-flex mb-3">
+                                            <a href="registercliente.php" class="btn btn-outline-success p-2"><b>Cliente</b></a>
+                                            <a href="registercliente.php" class="btn btn-outline-success p-2"><b>Coletor</b></a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                        </div>
+                    </div>
 
+                    <div class="row justify-content-center">
+                        <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
                             <div class="credits">
                                 <div class="copyright">
                                     &copy; Copyright <strong><span>ReCiclo</span></strong>. All Rights Reserved
@@ -71,8 +81,8 @@
                                     Designed by <a href="https://www.linkedin.com/in/phelipe-rodovalho-ufu/">Phelipe R Santos</a>
                                 </div>
                             </div>
-
                         </div>
+
                     </div>
                 </div>
 

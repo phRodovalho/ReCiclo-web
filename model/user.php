@@ -51,7 +51,7 @@ class User
     public function set_lastacess($last_acess, $idUser)
     {
         //pt-br recebendo o ultimo acesso setando ele no obj usuário e atualizando com o update
-        //en-us
+
         $this->last_acess = $last_acess;
 
         $sql = 'UPDATE user SET last_acess = ? WHERE idUser = ?';
@@ -135,10 +135,10 @@ class User
 
     //Função usava para fazer o login
     public function select_user($email, $psw)
-    {   
+    {
         //pt-br Ela verifica se o usuário e senha existem no bd
         $stmt = $this->conexao->prepare("SELECT * from user where email = ? and password = ?");
-        $stmt->execute([$email, $psw]); 
+        $stmt->execute([$email, $psw]);
         $user = $stmt->fetch();
 
         return $user;
@@ -160,23 +160,24 @@ class User
         return $user;
     }
 
-    public function delete($idUser){
-         //para excluir um user antes preciso excluir os comentarios
-         $sql = 'delete from user where idUser = ?';
+    public function delete($idUser)
+    {
+        //para excluir um user antes preciso excluir os comentarios
+        $sql = 'delete from user where idUser = ?';
 
-         $prepare = $this->conexao->prepare($sql);
- 
-         $prepare->bindParam(1, $idUser);
- 
-         if ($prepare->execute() == TRUE) {
-             return true;
-         } else {
-             return false;
-         }
+        $prepare = $this->conexao->prepare($sql);
+
+        $prepare->bindParam(1, $idUser);
+
+        if ($prepare->execute() == TRUE) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
-Class Location
+class Location
 {
     ///pt-br criando os atributos privados
     /// en-us creating the private atributes
@@ -272,7 +273,7 @@ Class Location
     {
 
         $sql = 'INSERT INTO location (state , country , city , adress , district) VALUES (?,?,?,?,?)';
-        
+
         $prepare = $this->conex->prepare($sql);
 
         //pt-br vincula um parametro ao nome da variavel especificada
@@ -292,14 +293,14 @@ Class Location
             return false;
         }
     }
-    public function deleteLoc($idLocation){
-        {
+    public function deleteLoc($idLocation)
+    { {
             $sql = 'delete from location where idlocation = ?';
-    
+
             $prepare = $this->conex->prepare($sql);
-    
+
             $prepare->bindParam(1, $idLocation);
-            
+
             if ($prepare->execute() == TRUE) {
                 return true;
             } else {

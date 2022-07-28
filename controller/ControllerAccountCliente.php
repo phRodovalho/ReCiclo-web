@@ -10,6 +10,7 @@ echo $cpfcnpj;
 echo $txtphone;
 echo $date_birth;
 echo $password;
+
 echo $cep;
 echo $adress;
 echo $number;
@@ -27,32 +28,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         //pt-br relacionando as váriaveis input do formulário com as váriaveis do php - User
 
-        $name = filter_input(INPUT_POST, "txtname");
+        $nome = filter_input(INPUT_POST, "txtname");
         $email = filter_input(INPUT_POST, "txtemail");
         $cpfcnpj = filter_input(INPUT_POST, "txtcpfcnpj");
-        $txtphone = filter_input(INPUT_POST, "txtphone");
-        $date_birth = filter_input(INPUT_POST, "txtdate");
-        $password = filter_input(INPUT_POST, "password");
+        $telefone = filter_input(INPUT_POST, "txtphone");
+        $data_nascimento = filter_input(INPUT_POST, "txtdate");
+        $senha = filter_input(INPUT_POST, "password");
 
         $cep = filter_input(INPUT_POST, "txtcep");
-        $adress = filter_input(INPUT_POST, "txtadress");
-        $number = filter_input(INPUT_POST, "txtnumberadress");
-        $complement = filter_input(INPUT_POST, "txtcomplement");
+        $logradouro = filter_input(INPUT_POST, "txtadress");
+        $numero = filter_input(INPUT_POST, "txtnumberadress");
+        $complemento = filter_input(INPUT_POST, "txtcomplement");
         $bairro = filter_input(INPUT_POST, "txtbairro");
-        $city = filter_input(INPUT_POST, "txtcity");
-        $state = filter_input(INPUT_POST, "txtstate");
+        $cidade = filter_input(INPUT_POST, "txtcity");
+        $estado = filter_input(INPUT_POST, "txtstate");
 
         // verifico se as variaveis estão vazias
-        if (isset($name) && isset($date_birth) && isset($cpfcnpj) && isset($email) && isset($password)) {
+        if (isset($nome) && isset($data_nascimento) && isset($cpfcnpj) && isset($email) && isset($senha)) {
 
             //pt-br inserindo valores do formulário para o obj user
             //todo: criar classe user e inserir valores no banco de dados 
             $user = new User();
-            $user->set_name($name);
+            $user->set_name($nome);
+            $user->set_data_nascimento($data_nascimento);
+            $user->set_cpf($cpfcnpj);
             $user->set_email($email);
-            $user->set_password($psw);
-            $user->set_usertype($usr_type);
-            $user->set_birthdate($date_birth);
+            $user->set_senha($senha);
+            $user->set_telefone($telefone);
 
 
             //inserindo localizaçao e retornando id da localização

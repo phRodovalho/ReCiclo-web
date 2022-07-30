@@ -3,26 +3,6 @@ session_start();
 
 require_once("../model/user.php");
 
-//echo all variables
-echo $name;
-echo $email;
-echo $cpfcnpj;
-echo $txtphone;
-echo $date_birth;
-echo $password;
-
-echo $cep;
-echo $adress;
-echo $number;
-echo $complement;
-echo $bairro;
-echo $city;
-echo $state;
-
-
-echo "<script type='text/javascript'>alert('Account created successfully!');window.location.href = '../view/login.php';</script>";
-
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (filter_input(INPUT_POST, "userOp") == 1) { //insert
 
@@ -34,6 +14,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $telefone = filter_input(INPUT_POST, "txtphone");
         $data_nascimento = filter_input(INPUT_POST, "txtdate");
         $senha = filter_input(INPUT_POST, "password");
+        $confirsenha = filter_input(INPUT_POST, "confirpassword");
+        $usertype = filter_input(INPUT_POST, "optuser");
+        $descricao = filter_input(INPUT_POST, "txtdescricao");
 
         $cep = filter_input(INPUT_POST, "txtcep");
         $logradouro = filter_input(INPUT_POST, "txtadress");
@@ -44,62 +27,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $estado = filter_input(INPUT_POST, "txtstate");
 
         // verifico se as variaveis estão vazias
-        if (isset($nome) && isset($data_nascimento) && isset($cpfcnpj) && isset($email) && isset($senha)) {
+        if (isset($nome) && isset($email) && isset($cpfcnpj) && isset($senha)) {
 
             //pt-br inserindo valores do formulário para o obj user
             //todo: criar classe user e inserir valores no banco de dados 
             $user = new User();
             $user->set_name($nome);
             $user->set_data_nascimento($data_nascimento);
-            $user->set_cpf($cpfcnpj);
             $user->set_email($email);
-            $user->set_senha($senha);
             $user->set_telefone($telefone);
+            $user->set_senha($senha);
+            $user->set_cpfcnpj($cpfcnpj);
+            $user->set_user_type($usertype);
+            $user->set_descricao($descricao);
+
+            $loc = new Location();
+            $loc->set_cep($cep);
+            $loc->set_cidade($cidade);
+            $loc->set_estado($estado);
+            $loc->set_bairro($bairro);
+            $loc->set_numero($numero);
+            $loc->set_logradouro($logradouro);
+            $loc->set_complemento($complemento);
 
 
             //inserindo localizaçao e retornando id da localização
-            $isrloc = $loc->insert_location($loc->getstate(), $loc->getcountry(), $loc->getcity(), $loc->getadress(), $loc->getdistrict());
-            $isruser = $user->insert_user($user->getname(), $user->getemail(), $user->getpassword(), $user->getuser_type(), $user->getbirth_date(), $last_a, $idLoc);
+            $idloc = $loc->insert_location($loc->get_cep(), $loc->get_cidade(), $loc->get_estado(), $loc->get_bairro(), $loc->get_numero(), $loc->get_logradouro(), $loc->get_complemento());
 
-            if ($idLoc != false) { //se idloc tem conteudo entao insertUser
-                if ($user->insert_user($user->getname(), $user->getemail(), $user->getpassword(), $user->getuser_type(), $user->getbirth_date(), $last_a, $idLoc)  == true) {
+            if ($idloc != false) { //se idloc tem conteudo entao insertUser
+                $isruser = $user->insert_user($user->get_name(), $user->get_cpfcnpj(), $user->get_data_nascimento(), $user->get_email(), $user->get_telefone(), $user->get_senha(), $user->get_user_type(), $user->get_descricao(), $idloc);
+                echo "result insert boolean" . $isruser;
+                if ($isruser == true) {
                     echo "<script type='text/javascript'>alert('Account created successfully!')
                     ;window.location.href = '../view/login.php';</script>";
                 } else {
-                    echo "<script type='text/javascript'>alert('Error registering User, please try again');window.location.href = '../view/create-account.php';</script>";
+                    echo "<script type='text/javascript'>alert('Error registering User, please try again');window.location.href = '../view/register.php';</script>";
                 }
-            } else echo "<script type='text/javascript'>alert('Error to get id location or insert location, please try again');window.location.href = '../view/create-account.php';</script>";
+            } else echo "<script type='text/javascript'>alert('Error to get id location or insert location, please try again');window.location.href = '../view/register.php';</script>";
         } else {
-            echo "<script type='text/javascript'>alert('Error all information User has set');window.location.href = '../view/create-account.php';</script>";
+            echo "<script type='text/javascript'>alert('Error all information User has to be set');window.location.href = '../view/register.php';</script>";
         }
     } else if (filter_input(INPUT_POST, "userOp") == 2) { //login
         $email = filter_input(INPUT_POST, "email");     // pegando email
         $psw = filter_input(INPUT_POST, "password");    // pegando senha 
+        $remenber = filter_input(INPUT_POST, "remember");
 
         $user_login = new User();       //instanciando um obj do tipo user
-        $date = new DateTime();         // instanciando um obj do tipo data
-        $date->setTimezone(new DateTimeZone('America/Sao_Paulo'));      /// setando o horário da região sp
-        $last_a = $date->format('Y-m-d H:i:s');
-
-        $value = $user_login->select_user($email, $psw); // recebo de user um obj e salvo em value
+        $user = $user_login->select_user($email, $psw);
 
         //eu verifico se meu value é diferente de falso - se falso user não existe no banco
-        if ($value != false) {
+        if ($user != false) {
             //pt-br pegando o as variavel do obj user e setando elas nas variaveis de sessão
-            $_SESSION['idUser'] = $value['idUser'];
-            $_SESSION['nameUser'] = $value['name'];
-            $_SESSION['emailUser'] = $value['email'];
-            $_SESSION['passwordUser'] = $value['password'];
-            $_SESSION['userType'] = $value['user_type'];
-            $_SESSION['birth_dateUser'] = $value['birth_date'];
-            $_SESSION['lastAcessUser'] = $value['last_acess'];
-            $_SESSION['idLocationUser'] = $value['location_idlocation'];
+            $_SESSION['idusuario'] = $user['idusuario'];
+            $_SESSION['nameUser'] = $user['nome'];
+            $_SESSION['CPF'] = $user['CPF'];
+            $_SESSION['CNPJ'] = $user['CNPJ'];
+            $_SESSION['data_nascimento'] = $user['data_nascimento'];
+            $_SESSION['email'] = $user['email'];
+            $_SESSION['telefone'] = $user['telefone'];
+            $_SESSION['usertype'] = $user['usertype'];
+            $_SESSION['descricao'] = $user['descricao'];
+            $_SESSION['idendereco'] = $user['endereco_idendereco'];
 
-            // pt-br setando o ultimo acesso e relacionando com usuario da sessão
-            $user_login->set_lastacess($last_a, $value['idUser']); //chamando a função de ultimo acesso que salva no banco a ultima vez que o user fez o login
-
-            echo "<script type='text/javascript'>alert('Login sucess');window.location.href = '../view/home.php';</script>";
-        } else echo "<script type='text/javascript'>alert('Access not allowed, try again or create account');window.location.href = '../view/login.php';</script>";
+            echo "<script type='text/javascript'>alert('Login sucess');window.location.href = '../view/index.php';</script>";
+        } else echo "<script type='text/javascript'>alert('Access not allowed, try again or create account');window.location.href = '../view/index.php';</script>";
     } else if (filter_input(INPUT_POST, "userOp") == 3) { //delete
         $idUser = filter_input(INPUT_POST, "idUser");
         $idlocation = filter_input(INPUT_POST, "idLoc");

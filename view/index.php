@@ -9,8 +9,7 @@
 <body>
     <header id="header" class="fixed-top">
         <?php include("C:/xampp/htdocs/ReCiclo/helper/navbar.php"); ?>
-    </header><!-- End Header -->
-    <!-- ======= Hero Section ======= -->
+    </header>
     <section id="hero" class="d-flex align-items-center">
         <div class="container">
             <div class="row">
@@ -18,7 +17,7 @@
                     <h1>Cuide do nosso planeta, ReCicle!</h1>
                     <h2>Buscamos simplificar o processo de reciclagem, busque por pontos de reciclagem em sua cidade</h2>
                     <div class="d-flex">
-                        <a href="#about" class="btn-get-started scrollto">Quero reciclar</a>
+                        <a href="login.php" class="btn-get-started scrollto">Quero reciclar</a>
                         <!-- <a href="https://www.youtube.com/watch?v=jDDaplaOz7Q" class="glightbox btn-watch-video"><i class="bi bi-play-circle"></i><span>Watch Video</span></a>!-->
                     </div>
                 </div>

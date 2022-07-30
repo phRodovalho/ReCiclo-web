@@ -5,8 +5,7 @@ class User
 {
     ///pt-br criando os atributos privados
     private $nome;
-    private $cpf;
-    private $cnpj;
+    private $cpfcnpj;
     private $data_nascimento;
     private $email;
     private $telefone;
@@ -32,21 +31,13 @@ class User
     {
         $this->nome = $nome;
     }
-    public function get_cpf()
+    public function get_cpfcnpj()
     {
-        return $this->cpf;
+        return $this->cpfcnpj;
     }
-    public function set_cpf($cpf)
+    public function set_cpfcnpj($cpfcnpj)
     {
-        $this->cpf = $cpf;
-    }
-    public function get_cnpj()
-    {
-        return $this->cnpj;
-    }
-    public function set_cnpj($cnpj)
-    {
-        $this->cnpj = $cnpj;
+        $this->cpfcnpj = $cpfcnpj;
     }
     public function get_data_nascimento()
     {
@@ -105,59 +96,53 @@ class User
     {
         $this->idendereco = $idendereco;
     }
-
-    // pt-br atribuindo os valores com set
-    //Função que atualiza o ultimo acesso do usuário
-    public function set_lastacess($last_acess, $idUser)
-    {
-        //pt-br recebendo o ultimo acesso setando ele no obj usuário e atualizando com o update
-
-        $this->last_acess = $last_acess;
-
-        $sql = 'UPDATE user SET last_acess = ? WHERE idUser = ?';
-        $prepare = $this->conexao->prepare($sql);
-
-        $prepare->bindParam(1, $last_acess);
-        $prepare->bindParam(2, $idUser);
-
-        if ($prepare->execute() == TRUE) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-
     //CRUD
     //inserir usuário
-    public function insert_user($nome, $cpf, $cnpj, $data_nascimento, $email, $telefone, $senha, $user_type, $descricao, $idendereco)
+    public function insert_user($nome, $cpfcnpj, $data_nascimento, $email, $telefone, $senha, $user_type, $descricao, $idendereco)
     {
         /*
         INSERT INTO reciclo_db.usuario (nome, CPF, data_nascimento, email, telefone, senha, usertype ,endereco_idendereco)
         VALUES ('Phelipe R','03412345608', '1998-12-08','phefsfsantos@gmail.com', '64983493292', 'hashdessenhaexemplo', 'adm', 1)
         */
         //pt-br recebendo os valores do usuário e atribuindo ao objeto
-        if ($cpf == null) {
+        //verificar se o tamnho é 11 ou 14
+        echo " nome: " . $nome;
+        echo " cpfcnpj: " . $cpfcnpj;
+        echo " data_nascimento: " . $data_nascimento;
+        echo " email: " . $email;
+        echo " telefone: " . $telefone;
+        echo " senha: " . $senha;
+        echo " user_type: " . $user_type;
+        echo " descricao: " . $descricao;
+        echo " idendereco: " . $idendereco;
+
+        if (strlen($cpfcnpj) <= 11) {
             $sql = 'INSERT INTO reciclo_db.usuario (nome, CPF, data_nascimento, email, telefone, senha, usertype, descricao, endereco_idendereco) VALUES (?,?,?,?,?,?,?,?,?)';
             $prepare = $this->conexao->prepare($sql);
-            $prepare->bindParam(2, $cpf);
-        } else {
+
+            $prepare->bindParam(1, $nome);
+            $prepare->bindParam(2, $cpfcnpj);
+            $prepare->bindParam(3, $data_nascimento);
+            $prepare->bindParam(4, $email);
+            $prepare->bindParam(5, $telefone);
+            $prepare->bindParam(6, $senha);
+            $prepare->bindParam(7, $user_type);
+            $prepare->bindParam(8, $descricao);
+            $prepare->bindParam(9, $idendereco);
+        } else if (strlen($cpfcnpj) > 11) {
             $sql = 'INSERT INTO reciclo_db.usuario (nome, CNPJ, data_nascimento, email, telefone, senha, usertype, descricao, endereco_idendereco) VALUES (?,?,?,?,?,?,?,?,?)';
             $prepare = $this->conexao->prepare($sql);
-            $prepare->bindParam(2, $cnpj);
+
+            $prepare->bindParam(1, $nome);
+            $prepare->bindParam(2, $cpfcnpj);
+            $prepare->bindParam(3, $data_nascimento);
+            $prepare->bindParam(4, $email);
+            $prepare->bindParam(5, $telefone);
+            $prepare->bindParam(6, $senha);
+            $prepare->bindParam(7, $user_type);
+            $prepare->bindParam(8, $descricao);
+            $prepare->bindParam(9, $idendereco);
         }
-
-        //pt-br vincula um parametro ao nome da variavel especificada
-        //en-us binds a parameter to the specified variable name
-        $prepare->bindParam(1, $nome);
-        $prepare->bindParam(3, $data_nascimento);
-        $prepare->bindParam(4, $email);
-        $prepare->bindParam(5, $telefone);
-        $prepare->bindParam(6, $senha);
-        $prepare->bindParam(7, $user_type);
-        $prepare->bindParam(8, $descricao);
-        $prepare->bindParam(9, $idendereco);
-
         if ($prepare->execute() == TRUE) {
             return true;
         } else {
@@ -223,11 +208,12 @@ class Location
     ///pt-br criando os atributos privados
     /// en-us creating the private atributes
     private $cep;
-
-    private $country;
-    private $city;
-    private $adress;
-    private $district;
+    private $cidade;
+    private $estado;
+    private $bairro;
+    private $numero;
+    private $logradouro;
+    private $complemento;
 
     private $conex;
 
@@ -237,122 +223,90 @@ class Location
         $this->conex = $banco->getConnection();
     }
 
-    // pt-br atribuindo os valores com set
-    public function set_state($state)
+    //pt-br atribuindo os valores com set e get
+    public function set_cep($cep)
     {
-        $this->state = $state;
+        $this->cep = $cep;
+    }
+    public function get_cep()
+    {
+        return $this->cep;
+    }
+    public function set_cidade($cidade)
+    {
+        $this->cidade = $cidade;
+    }
+    public function get_cidade()
+    {
+        return $this->cidade;
+    }
+    public function set_estado($estado)
+    {
+        $this->estado = $estado;
+    }
+    public function get_estado()
+    {
+        return $this->estado;
+    }
+    public function set_bairro($bairro)
+    {
+        $this->bairro = $bairro;
+    }
+    public function get_bairro()
+    {
+        return $this->bairro;
+    }
+    public function set_numero($numero)
+    {
+        $this->numero = $numero;
+    }
+    public function get_numero()
+    {
+        return $this->numero;
+    }
+    public function set_logradouro($logradouro)
+    {
+        $this->logradouro = $logradouro;
+    }
+    public function get_logradouro()
+    {
+        return $this->logradouro;
+    }
+    public function set_complemento($complemento)
+    {
+        $this->complemento = $complemento;
+    }
+    public function get_complemento()
+    {
+        return $this->complemento;
     }
 
-    public function set_country($country)
-    {
-        $this->country = $country;
-    }
-
-    public function set_city($city)
-    {
-        $this->city = $city;
-    }
-
-    public function set_adress($adress)
-    {
-        $this->adress = $adress;
-    }
-
-    public function set_district($district)
-    {
-        $this->district = $district;
-    }
-
-    public function set_latitude($latitude)
-    {
-        $this->latitude = $latitude;
-    }
-
-    public function set_longitude($longitude)
-    {
-        $this->longitude = $longitude;
-    }
-
-    //pt-br pegando os dados com get
-
-    public function getstate()
-    {
-        return $this->state;
-    }
-
-    public function getcountry()
-    {
-        return $this->country;
-    }
-
-    public function getcity()
-    {
-        return $this->city;
-    }
-
-    public function getadress()
-    {
-        return $this->adress;
-    }
-
-    public function getdistrict()
-    {
-        return $this->district;
-    }
-
-    public function getlatitude()
-    {
-        return $this->latitude;
-    }
-
-    public function getlongitude()
-    {
-        return $this->longitude;
-    }
 
     //função que insere localização no banco
-    public function insert_location($state, $country, $city, $adress, $district)
+    public function insert_location($cep, $cidade, $estado, $bairro, $numero, $logradouro, $complemento)
     {
         /*
         INSERT INTO reciclo_db.endereco ( CEP, cidade, estado, bairro, numero, logradouro, complemento)
         VALUES ('38408196', 'Uberlândia', 'Minas Gerais','Santa Mônica', 590, 'Rua Cecilio Jorge', 'apt201');
         */
 
-        $sql = 'INSERT INTO location (state , country , city , adress , district) VALUES (?,?,?,?,?)';
-
+        $sql = 'INSERT INTO reciclo_db.endereco (CEP, cidade, estado, bairro, numero, logradouro, complemento) VALUES (?,?,?,?,?,?,?)';
         $prepare = $this->conex->prepare($sql);
-
-        //pt-br vincula um parametro ao nome da variavel especificada
-        //en-us binds a parameter to the specified variable name
-        $prepare->bindParam(1, $state);
-        $prepare->bindParam(2, $country);
-        $prepare->bindParam(3, $city);
-        $prepare->bindParam(4, $adress);
-        $prepare->bindParam(5, $district);
+        $prepare->bindParam(1, $cep);
+        $prepare->bindParam(2, $cidade);
+        $prepare->bindParam(3, $estado);
+        $prepare->bindParam(4, $bairro);
+        $prepare->bindParam(5, $numero);
+        $prepare->bindParam(6, $logradouro);
+        $prepare->bindParam(7, $complemento);
 
         if ($prepare->execute() == TRUE) {
-
             //pt-br pega o id da linha que acabou de ser inserida e retorna
             $last_id = $this->conex->lastInsertId();
+            echo 'idLocation insert sucess, num ' . $last_id;
             return $last_id;
         } else {
             return false;
-        }
-    }
-
-    public function deleteLoc($idLocation)
-    { {
-            $sql = 'delete from location where idlocation = ?';
-
-            $prepare = $this->conex->prepare($sql);
-
-            $prepare->bindParam(1, $idLocation);
-
-            if ($prepare->execute() == TRUE) {
-                return true;
-            } else {
-                return false;
-            }
         }
     }
 }

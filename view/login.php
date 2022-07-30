@@ -28,12 +28,12 @@
                                         <p class="text-center small">na sua conta ReCiclo</p>
                                     </div>
 
-                                    <form class="row g-3 needs-validation" novalidate method="post" action="../controller/ControllerUser.php">
+                                    <form class="row g-3 needs-validation" novalidate method="post" action="../controller/ControllerAccount.php">
 
                                         <div class="col-12">
 
                                             <div class="input-group has-validation">
-                                                <input type="text" name="username" class="form-control" id="yourUsername" placeholder="E-mail" required autofocus>
+                                                <input type="text" name="email" class="form-control" id="yourUsername" placeholder="E-mail" required autofocus>
                                                 <div class="invalid-feedback">Digite seu e-mail!</div>
                                             </div>
                                         </div>
@@ -54,7 +54,7 @@
                                         <div class="col-12">
                                             <button class="btn btn-primary w-100" type="submit">Login</button>
                                         </div>
-
+                                        <input type="hidden" value="2" name="userOp">
                                     </form>
 
                                 </div>
@@ -62,8 +62,7 @@
                                     <div class="col-12">
                                         <label class="form-check-label">Novo por aqui? Crie sua conta <b>ReCiclo</b></label>
                                         <div class="btn-group justify-content-center d-flex mb-3">
-                                            <a href="registercliente.php" class="btn btn-outline-success p-2"><b>Cliente</b></a>
-                                            <a href="registercliente.php" class="btn btn-outline-success p-2"><b>Coletor</b></a>
+                                            <a href="register.php" class="btn btn-outline-success p-2"><b>Crie sua conta</b></a>
                                         </div>
                                     </div>
                                 </div>

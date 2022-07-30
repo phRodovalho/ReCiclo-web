@@ -86,7 +86,23 @@
                                         <p class="text-center small">Entre com seus dados pessoais para ter acesso a todos os beneficios!</p>
                                     </div>
 
-                                    <form id="regForm" class="row needs-validation" novalidate method="post" action="../controller/ControllerAccountCliente.php">
+                                    <form id="regForm" class="row needs-validation" novalidate method="post" action="../controller/ControllerAccount.php">
+                                        <div class="tab">
+                                            <label class="form-label">Selecione seu perfil de usuário </label>
+                                            <div class="col-12">
+                                                <div class="form-check-inline">
+                                                    <label class="form-check-label form-label">
+                                                        <input type="radio" class="form-check-input" value="adm" name="optuser" required oninput="this.className = 'form-check-input'"> Cliente
+                                                    </label>
+                                                </div>
+                                                <div class="form-check-inline">
+                                                    <label class="form-check-label form-label">
+                                                        <input type="radio" class="form-check-input" value="coletor" name="optuser" required oninput="this.className = 'form-check-input'"> Coletor
+                                                    </label>
+                                                </div>
+                                                <div class="invalid-feedback">Por favor, escolha um perfil de usuário</div>
+                                            </div>
+                                        </div>
                                         <div class="tab">
                                             <div class="col-12">
                                                 <label class="form-label">Nome completo</label>
@@ -165,6 +181,12 @@
                                                 <input type="text" name="txtstate" class="form-control" id="uf" required oninput="this.className = 'form-control'">
                                             </div>
                                         </div>
+                                        <div class="tab">
+                                            <div class="col-12">
+                                                <label class="form-label">Descrição de Perfil</label>
+                                                <textarea id="edit-post" class="form-control" name="txtBody" style="height: 200px;" oninput="this.className = 'form-control'"> Conte um pouco sobre você e seus objetivos com a reciclagem...</textarea>
+                                            </div>
+                                        </div>
                                         <div style="overflow:auto;">
                                             <div style="float:right;">
                                                 <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
@@ -173,6 +195,8 @@
                                         </div>
                                         <!-- Circles which indicates the steps of the form: -->
                                         <div style="text-align:center;margin-top:20px;">
+                                            <span class="step"></span>
+                                            <span class="step"></span>
                                             <span class="step"></span>
                                             <span class="step"></span>
                                         </div>
@@ -271,7 +295,6 @@
             x[n].className += " active";
         }
     </script>
-
 
 </body>
 

@@ -4,7 +4,7 @@
 
     <nav id="navbar" class="navbar">
         <ul>
-            <li><a class="nav-link scrollto active" href="#contact">Pontos de Coleta </a></li>
+            <li><a class="nav-link scrollto " href="index.php ">Pontos de Coleta </a></li>
             <li><a class="nav-link scrollto" href="coleta.php">Pedido de Coleta </a></li>
             <li><a class="nav-link scrollto" href="calculadora.php">Calculadora de Impacto</a></li>
             <li><a class="nav-link scrollto " href="about.php">Sobre nós </a></li>

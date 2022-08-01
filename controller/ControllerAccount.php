@@ -51,13 +51,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $loc->set_complemento($complemento);
 
 
-            //inserindo localizaçao e retornando id da localização
-            $idloc = $loc->insert_location($loc->get_cep(), $loc->get_cidade(), $loc->get_estado(), $loc->get_bairro(), $loc->get_numero(), $loc->get_logradouro(), $loc->get_complemento());
+            //inserindo user e retornando id
+            $idUser = $user->insert_user($user->get_name(), $user->get_cpfcnpj(), $user->get_data_nascimento(), $user->get_email(), $user->get_telefone(), $user->get_senha(), $user->get_user_type(), $user->get_descricao());
 
-            if ($idloc != false) { //se idloc tem conteudo entao insertUser
-                $isruser = $user->insert_user($user->get_name(), $user->get_cpfcnpj(), $user->get_data_nascimento(), $user->get_email(), $user->get_telefone(), $user->get_senha(), $user->get_user_type(), $user->get_descricao(), $idloc);
-                echo "result insert boolean" . $isruser;
-                if ($isruser == true) {
+            if ($idUser != false) { //se iduser tem conteudo entao insertLoc
+                $idloc = $loc->insert_location($loc->get_cep(), $loc->get_cidade(), $loc->get_estado(), $loc->get_bairro(), $loc->get_numero(), $loc->get_logradouro(), $loc->get_complemento(), $idUser);
+                if ($idloc == true) {
                     echo "<script type='text/javascript'>alert('Account created successfully!')
                     ;window.location.href = '../view/login.php';</script>";
                 } else {
@@ -87,9 +86,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['telefone'] = $user['telefone'];
             $_SESSION['usertype'] = $user['usertype'];
             $_SESSION['descricao'] = $user['descricao'];
-            $_SESSION['idendereco'] = $user['endereco_idendereco'];
 
-            echo "<script type='text/javascript'>alert('Login sucess');window.location.href = '../view/index.php';</script>";
+            echo "<script type='text/javascript'>window.location.href = '../view/index.php';</script>";
         } else echo "<script type='text/javascript'>alert('Access not allowed, try again or create account');window.location.href = '../view/index.php';</script>";
     } else if (filter_input(INPUT_POST, "userOp") == 3) { //delete
         $idUser = filter_input(INPUT_POST, "idUser");

@@ -98,11 +98,11 @@ class User
     }
     //CRUD
     //inserir usuário
-    public function insert_user($nome, $cpfcnpj, $data_nascimento, $email, $telefone, $senha, $user_type, $descricao, $idendereco)
+    public function insert_user($nome, $cpfcnpj, $data_nascimento, $email, $telefone, $senha, $user_type, $descricao)
     {
         /*
-        INSERT INTO reciclo_db.usuario (nome, CPF, data_nascimento, email, telefone, senha, usertype ,endereco_idendereco)
-        VALUES ('Phelipe R','03412345608', '1998-12-08','phefsfsantos@gmail.com', '64983493292', 'hashdessenhaexemplo', 'adm', 1)
+        INSERT INTO reciclo_db.usuario (nome, CPF, data_nascimento, email, telefone, senha, usertype, descricao) 
+        VALUES ('Mestre dos Magos', '12345678909', '1998-12-08','adm@gmail.com', '64987564289', '123', 'adm', 'Me chame de mestre dos magos');
         */
         //pt-br recebendo os valores do usuário e atribuindo ao objeto
         //verificar se o tamnho é 11 ou 14
@@ -114,10 +114,9 @@ class User
         echo " senha: " . $senha;
         echo " user_type: " . $user_type;
         echo " descricao: " . $descricao;
-        echo " idendereco: " . $idendereco;
 
         if (strlen($cpfcnpj) <= 11) {
-            $sql = 'INSERT INTO reciclo_db.usuario (nome, CPF, data_nascimento, email, telefone, senha, usertype, descricao, endereco_idendereco) VALUES (?,?,?,?,?,?,?,?,?)';
+            $sql = 'INSERT INTO reciclo_db.usuario (nome, CPF, data_nascimento, email, telefone, senha, usertype, descricao) VALUES (?,?,?,?,?,?,?,?)';
             $prepare = $this->conexao->prepare($sql);
 
             $prepare->bindParam(1, $nome);
@@ -128,9 +127,8 @@ class User
             $prepare->bindParam(6, $senha);
             $prepare->bindParam(7, $user_type);
             $prepare->bindParam(8, $descricao);
-            $prepare->bindParam(9, $idendereco);
         } else if (strlen($cpfcnpj) > 11) {
-            $sql = 'INSERT INTO reciclo_db.usuario (nome, CNPJ, data_nascimento, email, telefone, senha, usertype, descricao, endereco_idendereco) VALUES (?,?,?,?,?,?,?,?,?)';
+            $sql = 'INSERT INTO reciclo_db.usuario (nome, CNPJ, data_nascimento, email, telefone, senha, usertype, descricao) VALUES (?,?,?,?,?,?,?,?)';
             $prepare = $this->conexao->prepare($sql);
 
             $prepare->bindParam(1, $nome);
@@ -141,10 +139,11 @@ class User
             $prepare->bindParam(6, $senha);
             $prepare->bindParam(7, $user_type);
             $prepare->bindParam(8, $descricao);
-            $prepare->bindParam(9, $idendereco);
         }
         if ($prepare->execute() == TRUE) {
-            return true;
+            //pt-br pega o id da linha que acabou de ser inserida e retorna
+            $last_id = $this->conexao->lastInsertId();
+            return $last_id;
         } else {
             return false;
         }
@@ -283,14 +282,14 @@ class Location
 
 
     //função que insere localização no banco
-    public function insert_location($cep, $cidade, $estado, $bairro, $numero, $logradouro, $complemento)
+    public function insert_location($cep, $cidade, $estado, $bairro, $numero, $logradouro, $complemento, $idUser)
     {
         /*
-        INSERT INTO reciclo_db.endereco ( CEP, cidade, estado, bairro, numero, logradouro, complemento)
-        VALUES ('38408196', 'Uberlândia', 'Minas Gerais','Santa Mônica', 590, 'Rua Cecilio Jorge', 'apt201');
+        INSERT INTO reciclo_db.endereco (CEP, cidade, estado, bairro, numero, logradouro, complemento, usuario_idusuario)
+        VALUES ('38408196', 'Caverna do Dragao', 'Teste', 'Teste', 1222, 'Rua dos magos', 'TV Globinho', 9);
         */
 
-        $sql = 'INSERT INTO reciclo_db.endereco (CEP, cidade, estado, bairro, numero, logradouro, complemento) VALUES (?,?,?,?,?,?,?)';
+        $sql = 'INSERT INTO reciclo_db.endereco (CEP, cidade, estado, bairro, numero, logradouro, complemento, usuario_idusuario) VALUES (?,?,?,?,?,?,?,?)';
         $prepare = $this->conex->prepare($sql);
         $prepare->bindParam(1, $cep);
         $prepare->bindParam(2, $cidade);
@@ -299,12 +298,10 @@ class Location
         $prepare->bindParam(5, $numero);
         $prepare->bindParam(6, $logradouro);
         $prepare->bindParam(7, $complemento);
+        $prepare->bindParam(8, $idUser);
 
         if ($prepare->execute() == TRUE) {
-            //pt-br pega o id da linha que acabou de ser inserida e retorna
-            $last_id = $this->conex->lastInsertId();
-            echo 'idLocation insert sucess, num ' . $last_id;
-            return $last_id;
+            return true;
         } else {
             return false;
         }

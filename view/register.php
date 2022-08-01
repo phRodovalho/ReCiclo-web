@@ -92,7 +92,7 @@
                                             <div class="col-12">
                                                 <div class="form-check-inline">
                                                     <label class="form-check-label form-label">
-                                                        <input type="radio" class="form-check-input" value="adm" name="optuser" required oninput="this.className = 'form-check-input'"> Cliente
+                                                        <input type="radio" class="form-check-input" value="cliente" name="optuser" required oninput="this.className = 'form-check-input'"> Cliente
                                                     </label>
                                                 </div>
                                                 <div class="form-check-inline">
@@ -184,7 +184,7 @@
                                         <div class="tab">
                                             <div class="col-12">
                                                 <label class="form-label">Descrição de Perfil</label>
-                                                <textarea id="edit-post" class="form-control" name="txtBody" style="height: 200px;" oninput="this.className = 'form-control'"> Conte um pouco sobre você e seus objetivos com a reciclagem...</textarea>
+                                                <textarea id="txtdescricao" class="form-control" name="txtdescricao" style="height: 200px;" oninput="this.className = 'form-control'"> Conte um pouco sobre você e seus objetivos com a reciclagem...</textarea>
                                             </div>
                                         </div>
                                         <div style="overflow:auto;">
@@ -242,9 +242,11 @@
             // Exit the function if any field in the current tab is invalid:
             if (n == 1 && !validateForm()) return false;
             // function to compare password and confirm password if not eguals return false
+
             psw1 = document.getElementById("yourPassword").value;
             psw2 = document.getElementById("confirPassword").value;
-            if (psw1 != psw2) {
+
+            if (psw1 != psw2 && n == 2) {
                 alert("Senhas não conferem! Por favor, digite novamente.");
                 return false;
             }
